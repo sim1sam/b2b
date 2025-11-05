@@ -33,8 +33,8 @@
     <div class="card">
         <div class="card-body p-0">
             <!-- Desktop Table View -->
-            <div class="table-responsive d-none d-md-block">
-                <table class="table table-bordered table-striped mb-0">
+            <div class="d-none d-md-block">
+                <table class="table table-bordered table-striped mb-0" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>PO Number</th>
@@ -215,9 +215,31 @@
     .gap-2 {
         gap: 0.5rem;
     }
+    /* Remove scrollbars */
+    .card-body {
+        overflow-x: hidden;
+    }
+    /* Desktop table styles */
+    @media (min-width: 768px) {
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            padding: 8px 6px;
+            font-size: 0.875rem;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table tbody td {
+            padding: 8px 6px;
+            font-size: 0.875rem;
+        }
+    }
     @media (max-width: 767.98px) {
         .card-body {
-            padding: 1rem;
+            padding: 0.75rem;
+        }
+        .card.mb-3 {
+            margin-bottom: 0.75rem !important;
         }
         .btn-sm {
             padding: 0.375rem 0.75rem;
