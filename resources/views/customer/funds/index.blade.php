@@ -23,10 +23,10 @@
 
     <!-- Balance Cards -->
     <div class="row">
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-3 col-6 mb-3">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>৳{{ number_format($availableBalance, 2) }}</h3>
+                    <h3>৳{{ number_format((float)$availableBalance, 2, '.', '') }}</h3>
                     <p>Available Balance</p>
                 </div>
                 <div class="icon">
@@ -35,10 +35,10 @@
             </div>
         </div>
         
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-3 col-6 mb-3">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>৳{{ number_format($totalDeposits, 2) }}</h3>
+                    <h3>৳{{ number_format((float)$totalDeposits, 2, '.', '') }}</h3>
                     <p>Total Deposits</p>
                 </div>
                 <div class="icon">
@@ -47,10 +47,10 @@
             </div>
         </div>
         
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-3 col-6 mb-3">
             <div class="small-box bg-danger">
                 <div class="inner">
-                    <h3>৳{{ number_format($totalSpent, 2) }}</h3>
+                    <h3>৳{{ number_format((float)$totalSpent, 2, '.', '') }}</h3>
                     <p>Total Spent</p>
                 </div>
                 <div class="icon">
@@ -59,10 +59,10 @@
             </div>
         </div>
         
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-3 col-6 mb-3">
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>৳{{ number_format($pendingDeposits, 2) }}</h3>
+                    <h3>৳{{ number_format((float)$pendingDeposits, 2, '.', '') }}</h3>
                     <p>Pending Deposits</p>
                 </div>
                 <div class="icon">
@@ -247,6 +247,19 @@
     .card-body {
         overflow-x: hidden;
     }
+    /* Balance Cards - Consistent formatting */
+    .small-box .inner h3 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .small-box .inner p {
+        margin: 5px 0 0 0;
+        font-size: 0.875rem;
+    }
     /* Desktop table styles */
     @media (min-width: 768px) {
         .table {
@@ -275,7 +288,18 @@
             font-size: 0.875rem;
         }
         .small-box {
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem !important;
+        }
+        .small-box .inner h3 {
+            font-size: 1.5rem;
+        }
+        .row {
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+        .row > [class*="col-"] {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
         }
     }
     @media (max-width: 575.98px) {
@@ -284,6 +308,9 @@
         }
         .d-flex.gap-2 {
             flex-wrap: wrap;
+        }
+        .small-box .inner h3 {
+            font-size: 1.25rem;
         }
     }
 </style>
