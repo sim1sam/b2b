@@ -24,6 +24,36 @@ class InvoiceController extends Controller
 
         $availableBalance = FundTransaction::getAvailableBalance(Auth::id());
 
+        // Calculate dispute window status for each invoice
+        foreach ($invoices as $invoice) {
+            // Auto-close dispute window if 48 hours have passed
+            if ($invoice->dispute_status === 'open' && $invoice->dispute_opened_at) {
+                $hoursPassed = $invoice->dispute_opened_at->diffInHours(now());
+                if ($hoursPassed >= 48) {
+                    $invoice->update([
+                        'dispute_status' => 'closed',
+                        'order_status' => 'completed',
+                    ]);
+                    $invoice->refresh();
+                }
+            }
+
+            // Check if dispute window is open
+            $invoice->dispute_window_open = false;
+            $invoice->hours_remaining = 0;
+            $invoice->minutes_remaining = 0;
+            
+            if ($invoice->dispute_status === 'open' && $invoice->dispute_opened_at) {
+                $minutesPassed = $invoice->dispute_opened_at->diffInMinutes(now());
+                $totalMinutesRemaining = (48 * 60) - $minutesPassed;
+                if ($totalMinutesRemaining > 0) {
+                    $invoice->dispute_window_open = true;
+                    $invoice->hours_remaining = floor($totalMinutesRemaining / 60);
+                    $invoice->minutes_remaining = $totalMinutesRemaining % 60;
+                }
+            }
+        }
+
         return view('customer.invoices.index', compact('invoices', 'availableBalance'));
     }
 

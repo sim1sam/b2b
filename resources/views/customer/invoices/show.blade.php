@@ -308,7 +308,7 @@
                                 <strong>Delivery Request Submitted:</strong> Your delivery request has been submitted and is being processed.
                             </div>
                         @elseif($disputeWindowOpen)
-                            <div class="card border-warning">
+                            <div id="dispute-section" class="card border-warning">
                                 <div class="card-header bg-warning">
                                     <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Dispute Window Open</h5>
                                 </div>
