@@ -50,7 +50,7 @@
                             <i class="fas fa-user"></i> 
                             <strong>Client:</strong> {{ $client->business_name ?? $client->name }}<br>
                             <i class="fas fa-wallet"></i> 
-                            <strong>Total Available Funds:</strong> ৳{{ number_format($availableBalance, 2) }}
+                            <strong>Total Available Funds:</strong> {{ number_format($availableBalance, 2) }}
                             @if($exchangeRate && $exchangeRate > 0)
                                 <br><i class="fas fa-exchange-alt"></i> 
                                 <strong>Exchange Rate:</strong> 
@@ -138,7 +138,7 @@
                                                     <label>Calculated Amount (BDT)</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text">৳</span>
+                                                            <span class="input-group-text"></span>
                                                         </div>
                                                         <input type="text" class="form-control calculated-bdt" 
                                                                id="calculated_bdt_0" readonly 
@@ -170,7 +170,7 @@
                                 <div class="alert alert-warning mb-3">
                                     <i class="fas fa-info-circle"></i>
                                     <strong>Total Amount (BDT):</strong> 
-                                    <span id="total-amount-bdt" class="font-weight-bold" style="font-size: 1.2em;">৳0.00</span>
+                                    <span id="total-amount-bdt" class="font-weight-bold" style="font-size: 1.2em;">0.00</span>
                                 </div>
 
                                 <div class="form-group mb-3">
@@ -178,7 +178,7 @@
                                     <select name="fund_transaction_id" id="fund_transaction_id" 
                                             class="form-control fund-select @error('fund_transaction_id') is-invalid @enderror" required>
                                         <option value="total" data-amount="{{ $availableBalance }}" selected>
-                                            Total Available Funds: ৳{{ number_format($availableBalance, 2) }}
+                                            Total Available Funds: {{ number_format($availableBalance, 2) }}
                                         </option>
                                     </select>
                                     @error('fund_transaction_id')
@@ -188,7 +188,7 @@
                                         <i class="fas fa-exclamation-triangle"></i> Low Fund! Please Add Fund or contact admin for a manual payment.
                                     </div>
                                     <small class="form-text text-muted">
-                                        <strong>Total Available Funds:</strong> ৳{{ number_format($availableBalance, 2) }}
+                                        <strong>Total Available Funds:</strong> {{ number_format($availableBalance, 2) }}
                                     </small>
                                 </div>
 
@@ -356,7 +356,7 @@
             document.querySelectorAll('.calculated-bdt').forEach(function(input) {
                 total += parseFloat(input.value) || 0;
             });
-            document.getElementById('total-amount-bdt').textContent = '৳' + total.toFixed(2);
+            document.getElementById('total-amount-bdt').textContent = '' + total.toFixed(2);
             validateTotalFund();
         }
 
@@ -384,7 +384,7 @@
         // Validate total fund amount against total calculated BDT
         function validateTotalFund() {
             const fundSelect = document.getElementById('fund_transaction_id');
-            const totalAmount = parseFloat(document.getElementById('total-amount-bdt').textContent.replace('৳', '').replace(',', '')) || 0;
+            const totalAmount = parseFloat(document.getElementById('total-amount-bdt').textContent.replace('', '').replace(',', '')) || 0;
             const fundError = document.getElementById('fund-error');
             
             if (!fundSelect || totalAmount === 0) {
@@ -505,7 +505,7 @@
 
         // Form validation - prevent submission if insufficient funds
         document.getElementById('purchaseRequestForm').addEventListener('submit', function(e) {
-            const totalAmount = parseFloat(document.getElementById('total-amount-bdt').textContent.replace('৳', '').replace(',', '')) || 0;
+            const totalAmount = parseFloat(document.getElementById('total-amount-bdt').textContent.replace('', '').replace(',', '')) || 0;
             
             // Validate total fund
             if (!validateTotalFund()) {

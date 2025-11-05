@@ -74,9 +74,9 @@
                             <th>Amount</th>
                             <td>
                                 @if($fundTransaction->type === 'deposit')
-                                    <strong class="text-success" style="font-size: 1.2em;">+৳{{ number_format($fundTransaction->amount, 2) }}</strong>
+                                    <strong class="text-success" style="font-size: 1.2em;">+{{ number_format($fundTransaction->amount, 2) }}</strong>
                                 @else
-                                    <strong class="text-danger" style="font-size: 1.2em;">-৳{{ number_format($fundTransaction->amount, 2) }}</strong>
+                                    <strong class="text-danger" style="font-size: 1.2em;">-{{ number_format($fundTransaction->amount, 2) }}</strong>
                                 @endif
                             </td>
                         </tr>

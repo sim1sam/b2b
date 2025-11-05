@@ -32,6 +32,23 @@ class PurchaseRequestController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Filter by payment_status
+        if ($request->has('payment_status') && $request->payment_status !== '') {
+            if ($request->payment_status === 'pending') {
+                $query->where(function($q) {
+                    $q->where('payment_status', '!=', 'paid')
+                      ->orWhereNull('payment_status');
+                });
+            } else {
+                $query->where('payment_status', $request->payment_status);
+            }
+        }
+
+        // Filter by is_gst_payment
+        if ($request->has('is_gst_payment') && $request->is_gst_payment !== '') {
+            $query->where('is_gst_payment', $request->is_gst_payment == '1' ? true : false);
+        }
+
         $purchaseRequests = $query->paginate(15);
         $clients = User::where('role', 'customer')->orderBy('name')->get();
 

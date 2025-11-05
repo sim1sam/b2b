@@ -31,15 +31,17 @@ class BrandingServiceProvider extends ServiceProvider
                 if ($admin->app_name) {
                     config(['adminlte.logo' => $admin->app_name]);
                 }
-                if ($admin->favicon) {
-                    $faviconUrl = \Illuminate\Support\Facades\Storage::url($admin->favicon);
-                    // Inject favicon into head
-                    $faviconHtml = '<link rel="icon" type="image/x-icon" href="' . $faviconUrl . '">';
-                    $faviconHtml .= '<link rel="shortcut icon" type="image/x-icon" href="' . $faviconUrl . '">';
-                    $faviconHtml .= '<link rel="apple-touch-icon" href="' . $faviconUrl . '">';
-                    
-                    $existingExtraHead = config('adminlte.extra_head', '');
-                    config(['adminlte.extra_head' => $existingExtraHead . $faviconHtml]);
+                // Favicon is now handled directly in the master template override
+                // No need to inject via extra_head config
+            }
+            
+            // Set dashboard URL based on authenticated user role
+            if (auth()->check()) {
+                $user = auth()->user();
+                if ($user->role === 'admin') {
+                    config(['adminlte.dashboard_url' => 'admin/dashboard']);
+                } elseif ($user->role === 'customer') {
+                    config(['adminlte.dashboard_url' => 'customer/dashboard']);
                 }
             }
         } catch (\Exception $e) {
@@ -83,6 +85,7 @@ class BrandingServiceProvider extends ServiceProvider
                 ]);
             }
         });
+
 
     }
 }

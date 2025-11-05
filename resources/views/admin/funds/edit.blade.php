@@ -27,7 +27,7 @@
                             <label for="amount">Amount <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">৳</span>
+                                    <span class="input-group-text"></span>
                                 </div>
                                 <input type="number" name="amount" id="amount" 
                                        class="form-control @error('amount') is-invalid @enderror" 
@@ -37,7 +37,7 @@
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <small class="form-text text-muted">Original amount: ৳{{ number_format($fundTransaction->amount, 2) }}</small>
+                            <small class="form-text text-muted">Original amount: {{ number_format($fundTransaction->amount, 2) }}</small>
                         </div>
 
                         <div class="form-group">

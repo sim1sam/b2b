@@ -15,9 +15,12 @@ class PurchaseRequestController extends Controller
     /**
      * Display a listing of purchase requests.
      */
-    public function index()
+    public function index(Request $request)
     {
         $purchaseRequests = PurchaseRequest::where('user_id', Auth::id())
+            ->when($request->status, function($query) use ($request) {
+                $query->where('status', $request->status);
+            })
             ->with('vendor')
             ->latest()
             ->paginate(10);
@@ -255,10 +258,11 @@ class PurchaseRequestController extends Controller
 
         $purchaseRequest->update([
             'invoice' => $validated['invoice'],
+            'status' => 'completed', // Mark as completed when invoice is uploaded
         ]);
 
         return redirect()->route('customer.purchase-requests.show', $purchaseRequest->id)
-            ->with('success', 'Invoice uploaded successfully.');
+            ->with('success', 'Invoice uploaded successfully. Purchase request marked as completed.');
     }
 
     /**

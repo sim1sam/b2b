@@ -40,7 +40,7 @@
                             @error('apps_home_url')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
-                            <small class="form-text text-muted">The URL for the "Apps Home" menu item (appears under Dashboard)</small>
+                            <small class="form-text text-muted">The URL for the "Apps Home" menu item (appears under Dashboard for both Admin and Customer)</small>
                         </div>
 
                         <hr>

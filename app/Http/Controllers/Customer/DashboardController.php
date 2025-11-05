@@ -16,20 +16,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Fund Statistics
+        // Available Funds
         $availableBalance = FundTransaction::getAvailableBalance($user->id);
-        $totalDeposits = FundTransaction::where('user_id', $user->id)
-            ->where('type', 'deposit')
-            ->where('status', 'approved')
-            ->sum('amount');
-        $totalSpent = FundTransaction::where('user_id', $user->id)
-            ->where('type', 'purchase')
-            ->where('status', 'approved')
-            ->sum('amount');
-        $invoicePayments = FundTransaction::where('user_id', $user->id)
-            ->where('type', 'invoice_payment')
-            ->where('status', 'approved')
-            ->sum('amount');
+        
+        // Purchase Statistics
+        $totalPurchaseINR = PurchaseRequest::where('user_id', $user->id)
+            ->sum('amount_inr');
+        $totalPurchaseBDT = PurchaseRequest::where('user_id', $user->id)
+            ->sum('amount_bdt');
+        
+        // Invoice Statistics
+        $totalInvoicesBDT = Invoice::where('user_id', $user->id)
+            ->sum('rounded_total');
         
         // Purchase Request Statistics
         $totalPurchaseRequests = PurchaseRequest::where('user_id', $user->id)->count();
@@ -43,69 +41,59 @@ class DashboardController extends Controller
             ->where('status', 'completed')
             ->count();
         
-        // Invoice Statistics
-        $totalInvoices = Invoice::where('user_id', $user->id)->count();
-        $paidInvoices = Invoice::where('user_id', $user->id)
-            ->where('payment_status', 'paid')
-            ->count();
-        $pendingInvoices = Invoice::where('user_id', $user->id)
+        // Third Row: Invoice Metrics
+        // Due Invoices (BDT) - Value of payment pending invoices
+        $dueInvoicesBDT = Invoice::where('user_id', $user->id)
             ->where('payment_status', 'pending')
-            ->count();
-        $deliveredInvoices = Invoice::where('user_id', $user->id)
-            ->where('delivery_status', 'delivered')
-            ->count();
-        $completedOrders = Invoice::where('user_id', $user->id)
-            ->where('order_status', 'completed')
-            ->count();
-        $openDisputes = Invoice::where('user_id', $user->id)
-            ->where('dispute_status', 'open')
+            ->sum('rounded_total');
+        
+        // Provisional Invoices (BDT) - Purchase requests with items but no invoice
+        $provisionalInvoicesBDT = PurchaseRequest::where('user_id', $user->id)
+            ->whereHas('items')
+            ->whereDoesntHave('invoices')
+            ->sum('amount_bdt');
+        
+        // Delivery Pending - Count of paid invoices needing delivery, or have open dispute window
+        $deliveryPending = Invoice::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where(function($q) {
+                    // Paid invoices that need to be delivered
+                    $q->where('payment_status', 'paid')
+                      ->where('delivery_status', '!=', 'delivered');
+                })->orWhere(function($q) {
+                    // Invoices with open dispute window
+                    $q->where('dispute_status', 'open');
+                });
+            })
             ->count();
         
-        // Vendor Statistics
-        $totalVendors = Vendor::where('user_id', $user->id)->count();
-        $activeVendors = Vendor::where('user_id', $user->id)
-            ->where('is_active', true)
+        // Shipment Completed - Count of successful deliveries or invoices with closed dispute window
+        $shipmentCompleted = Invoice::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where(function($q) {
+                    // Successful deliveries
+                    $q->where('delivery_status', 'delivered')
+                      ->where('order_status', 'completed');
+                })->orWhere(function($q) {
+                    // Invoices with closed dispute window
+                    $q->where('dispute_status', 'closed');
+                });
+            })
             ->count();
-        
-        // Recent Purchase Requests
-        $recentPurchaseRequests = PurchaseRequest::where('user_id', $user->id)
-            ->with('vendor')
-            ->latest()
-            ->limit(5)
-            ->get();
-        
-        // Recent Transactions
-        $recentTransactions = FundTransaction::where('user_id', $user->id)
-            ->latest()
-            ->limit(5)
-            ->get();
-        
-        // Recent Invoices
-        $recentInvoices = Invoice::where('user_id', $user->id)
-            ->latest()
-            ->limit(5)
-            ->get();
         
         return view('customer.dashboard', compact(
             'availableBalance',
-            'totalDeposits',
-            'totalSpent',
-            'invoicePayments',
+            'totalPurchaseINR',
+            'totalPurchaseBDT',
+            'totalInvoicesBDT',
             'totalPurchaseRequests',
             'pendingPurchaseRequests',
             'approvedPurchaseRequests',
             'completedPurchaseRequests',
-            'totalVendors',
-            'activeVendors',
-            'recentPurchaseRequests',
-            'recentTransactions',
-            'totalInvoices',
-            'paidInvoices',
-            'pendingInvoices',
-            'deliveredInvoices',
-            'completedOrders',
-            'openDisputes',
-            'recentInvoices'
+            'dueInvoicesBDT',
+            'provisionalInvoicesBDT',
+            'deliveryPending',
+            'shipmentCompleted'
         ));
     }
 }

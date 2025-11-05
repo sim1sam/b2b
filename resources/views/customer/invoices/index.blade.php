@@ -33,7 +33,7 @@
                 <span class="info-box-icon bg-info"><i class="fas fa-wallet"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Available Balance</span>
-                    <span class="info-box-number">৳{{ number_format($availableBalance, 2) }}</span>
+                    <span class="info-box-number">{{ number_format($availableBalance, 2) }}</span>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                                     <td><strong>{{ $invoice->invoice_number }}</strong></td>
                                     <td>{{ $invoice->shipping_mark }}</td>
                                     <td>{{ $invoice->purchaseRequests->count() }} order(s)</td>
-                                    <td><strong>৳{{ number_format($invoice->rounded_total, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($invoice->rounded_total, 2) }}</strong></td>
                                     <td>
                                         @if($invoice->payment_status === 'paid')
                                             <span class="badge badge-success"><i class="fas fa-check-circle"></i> Paid</span>
@@ -92,6 +92,14 @@
                                         <a href="{{ route('customer.invoices.show', $invoice->id) }}" class="btn btn-sm btn-primary" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
+                                        @if($invoice->payment_status === 'paid' && $invoice->delivery_status !== 'delivered' && $invoice->delivery_request_status !== 'requested')
+                                            <form action="{{ route('customer.invoices.delivery-request', $invoice->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-info" title="Request Delivery" onclick="return confirm('Are you sure you want to request delivery for this invoice?');">
+                                                    <i class="fas fa-truck"></i> Delivery Request
+                                                </button>
+                                            </form>
+                                        @endif
                                         @if($invoice->dispute_window_open ?? false)
                                             <a href="{{ route('customer.invoices.show', $invoice->id) }}#dispute-section" class="btn btn-sm btn-warning" title="Dispute Window Open - Time Remaining: {{ str_pad($invoice->hours_remaining ?? 0, 2, '0', STR_PAD_LEFT) }}:{{ str_pad($invoice->minutes_remaining ?? 0, 2, '0', STR_PAD_LEFT) }}">
                                                 <i class="fas fa-exclamation-triangle"></i> Dispute
@@ -135,7 +143,7 @@
                                     </div>
                                     <div class="col-6">
                                         <small class="text-muted d-block">Total Amount</small>
-                                        <strong class="text-success">৳{{ number_format($invoice->rounded_total, 2) }}</strong>
+                                        <strong class="text-success">{{ number_format($invoice->rounded_total, 2) }}</strong>
                                     </div>
                                 </div>
 
@@ -171,6 +179,14 @@
                                     <a href="{{ route('customer.invoices.show', $invoice->id) }}" class="btn btn-sm btn-primary flex-fill">
                                         <i class="fas fa-eye"></i> View
                                     </a>
+                                    @if($invoice->payment_status === 'paid' && $invoice->delivery_status !== 'delivered' && $invoice->delivery_request_status !== 'requested')
+                                        <form action="{{ route('customer.invoices.delivery-request', $invoice->id) }}" method="POST" class="d-inline flex-fill">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-info w-100" onclick="return confirm('Are you sure you want to request delivery for this invoice?');">
+                                                <i class="fas fa-truck"></i> Delivery Request
+                                            </button>
+                                        </form>
+                                    @endif
                                     @if($invoice->dispute_window_open ?? false)
                                         <a href="{{ route('customer.invoices.show', $invoice->id) }}#dispute-section" class="btn btn-sm btn-warning flex-fill">
                                             <i class="fas fa-exclamation-triangle"></i> Dispute

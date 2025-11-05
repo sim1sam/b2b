@@ -133,7 +133,7 @@
                             <label for="lowest_shipping_charge_per_kg">Lowest Shipping Charge per Kg (BDT) <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">৳</span>
+                                    <span class="input-group-text"></span>
                                 </div>
                                 <input type="number" name="lowest_shipping_charge_per_kg" id="lowest_shipping_charge_per_kg" 
                                        class="form-control @error('lowest_shipping_charge_per_kg') is-invalid @enderror" 

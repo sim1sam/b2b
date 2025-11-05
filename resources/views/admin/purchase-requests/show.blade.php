@@ -98,7 +98,7 @@
                         <tr>
                             <th>Amount (BDT)</th>
                             <td>
-                                <strong class="text-primary" style="font-size: 1.2em;">৳{{ number_format($purchaseRequest->amount_bdt ?? $purchaseRequest->amount, 2) }}</strong>
+                                <strong class="text-primary" style="font-size: 1.2em;">{{ number_format($purchaseRequest->amount_bdt ?? $purchaseRequest->amount, 2) }}</strong>
                             </td>
                         </tr>
                         @if($purchaseRequest->user->exchange_rate)
@@ -200,7 +200,7 @@
                 </div>
                 <div class="card-body">
                     <p><strong>Transaction ID:</strong> #{{ $purchaseRequest->fundTransaction->id }}</p>
-                    <p><strong>Amount:</strong> ৳{{ number_format(abs($purchaseRequest->fundTransaction->amount), 2) }}</p>
+                    <p><strong>Amount:</strong> {{ number_format(abs($purchaseRequest->fundTransaction->amount), 2) }}</p>
                     <p><strong>Status:</strong> 
                         @if($purchaseRequest->fundTransaction->status === 'approved')
                             <span class="badge badge-success">Approved</span>
@@ -351,7 +351,7 @@
                                         <td>{{ $item->item_name }}</td>
                                         <td>{{ number_format($item->quantity, 2) }}</td>
                                         <td>{{ number_format($item->weight, 2) }}</td>
-                                        <td><strong>৳{{ number_format($item->total_cost, 2) }}</strong></td>
+                                        <td><strong>{{ number_format($item->total_cost, 2) }}</strong></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -379,7 +379,7 @@
                                 @endphp
                                 <tr>
                                     <td colspan="3" class="text-right"><strong>Items Subtotal:</strong></td>
-                                    <td><strong>৳{{ number_format($itemsTotal, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($itemsTotal, 2) }}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="3" class="text-right"><strong>Net Weight:</strong></td>
@@ -395,30 +395,30 @@
                                 <tr>
                                     <td colspan="3" class="text-right"><strong>Packaging Cost:</strong></td>
                                     <td>
-                                        <strong>৳{{ number_format($packagingCost, 2) }}</strong>
-                                        <small class="text-muted">(Lowest: ৳{{ number_format($lowestShippingCharge, 2) }}/Kg)</small>
+                                        <strong>{{ number_format($packagingCost, 2) }}</strong>
+                                        <small class="text-muted">(Lowest: {{ number_format($lowestShippingCharge, 2) }}/Kg)</small>
                                     </td>
                                 </tr>
                                 @if($transportationCharge > 0)
                                 <tr>
                                     <td colspan="3" class="text-right"><strong>Transportation Charge:</strong></td>
-                                    <td><strong>৳{{ number_format($transportationCharge, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($transportationCharge, 2) }}</strong></td>
                                 </tr>
                                 @endif
                                 <tr>
                                     <td colspan="3" class="text-right"><strong>Round Off:</strong></td>
                                     <td>
-                                        <strong>৳{{ number_format($roundOffAmount, 2) }}</strong>
+                                        <strong>{{ number_format($roundOffAmount, 2) }}</strong>
                                         <small class="text-muted">(Round to nearest lower 50)</small>
                                     </td>
                                 </tr>
                                 <tr class="bg-light">
                                     <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                                    <td><strong class="text-primary">৳{{ number_format($roundedTotal, 2) }}</strong></td>
+                                    <td><strong class="text-primary">{{ number_format($roundedTotal, 2) }}</strong></td>
                                 </tr>
                                 <tr class="text-muted">
                                     <td colspan="3" class="text-right"><small>Original Amount:</small></td>
-                                    <td><small>৳{{ number_format($totalCost, 2) }}</small></td>
+                                    <td><small>{{ number_format($totalCost, 2) }}</small></td>
                                 </tr>
                             </tfoot>
                         </table>

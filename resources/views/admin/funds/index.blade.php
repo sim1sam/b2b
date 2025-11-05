@@ -66,7 +66,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>৳{{ number_format($pendingDeposits, 2) }}</h3>
+                    <h3>{{ number_format($pendingDeposits, 2) }}</h3>
                     <p>Pending Deposits</p>
                 </div>
                 <div class="icon">
@@ -162,9 +162,9 @@
                             </td>
                             <td>
                                 @if($transaction->type === 'deposit')
-                                    <strong class="text-success">+৳{{ number_format($transaction->amount, 2) }}</strong>
+                                    <strong class="text-success">+{{ number_format($transaction->amount, 2) }}</strong>
                                 @else
-                                    <strong class="text-danger">-৳{{ number_format($transaction->amount, 2) }}</strong>
+                                    <strong class="text-danger">-{{ number_format($transaction->amount, 2) }}</strong>
                                 @endif
                             </td>
                             <td>

@@ -183,6 +183,9 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Profile
                             </button>
+                            <a href="{{ route('admin.profile.change-password') }}" class="btn btn-secondary">
+                                <i class="fas fa-key"></i> Change Password
+                            </a>
                         </div>
                     </form>
                 </div>

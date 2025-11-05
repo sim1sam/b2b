@@ -142,15 +142,15 @@
                                             <td><strong>{{ $item->item_name }}</strong></td>
                                             <td>{{ number_format($item->quantity, 2) }}</td>
                                             <td>{{ number_format($item->weight, 2) }}</td>
-                                            <td>৳{{ number_format($item->rate_per_unit, 2) }}</td>
-                                            <td>৳{{ number_format($item->item_cost, 2) }}</td>
+                                            <td>{{ number_format($item->rate_per_unit, 2) }}</td>
+                                            <td>{{ number_format($item->item_cost, 2) }}</td>
                                             <td>
-                                                ৳{{ number_format($item->shipping_cost, 2) }}
+{{ number_format($item->shipping_cost, 2) }}
                                                 @if($isQtyBased)
-                                                    <br><small class="text-muted">(Includes item cost: ৳{{ number_format($item->item_cost, 2) }})</small>
+                                                    <br><small class="text-muted">(Includes item cost: {{ number_format($item->item_cost, 2) }})</small>
                                                 @endif
                                             </td>
-                                            <td><strong>৳{{ number_format($item->total_cost, 2) }}</strong></td>
+                                            <td><strong>{{ number_format($item->total_cost, 2) }}</strong></td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -158,7 +158,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Items Subtotal:</strong></td>
-                                    <td><strong>৳{{ number_format($itemsTotalCost, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($itemsTotalCost, 2) }}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-right"><strong>Net Weight:</strong></td>
@@ -176,10 +176,10 @@
                                 <tr>
                                     <td colspan="5" class="text-right"><strong>Packaging Cost:</strong></td>
                                     <td colspan="4">
-                                        <strong>৳{{ number_format($packagingCost, 2) }}</strong>
+                                        <strong>{{ number_format($packagingCost, 2) }}</strong>
                                         @if($packagingWeight > 0 && $lowestShippingCharge > 0)
                                             <small class="text-muted">
-                                                ({{ number_format($packagingWeight, 2) }} Kg × ৳{{ number_format($lowestShippingCharge, 2) }}/Kg)
+                                                ({{ number_format($packagingWeight, 2) }} Kg × {{ number_format($lowestShippingCharge, 2) }}/Kg)
                                             </small>
                                         @endif
                                     </td>
@@ -187,23 +187,23 @@
                                 @if($totalTransportationCharge > 0)
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Transportation / Delivery Charge:</strong></td>
-                                    <td><strong>৳{{ number_format($totalTransportationCharge, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($totalTransportationCharge, 2) }}</strong></td>
                                 </tr>
                                 @endif
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Round Off:</strong></td>
                                     <td>
-                                        <strong>৳{{ number_format($invoice->total_amount - $invoice->rounded_total, 2) }}</strong>
+                                        <strong>{{ number_format($invoice->total_amount - $invoice->rounded_total, 2) }}</strong>
                                         <small class="text-muted">(Round to nearest lower 50)</small>
                                     </td>
                                 </tr>
                                 <tr class="bg-light">
                                     <td colspan="8" class="text-right"><strong>Total Amount:</strong></td>
-                                    <td><strong class="text-primary" style="font-size: 1.2em;">৳{{ number_format($invoice->rounded_total, 2) }}</strong></td>
+                                    <td><strong class="text-primary" style="font-size: 1.2em;">{{ number_format($invoice->rounded_total, 2) }}</strong></td>
                                 </tr>
                                 <tr class="text-muted">
                                     <td colspan="8" class="text-right"><small>Original Amount:</small></td>
-                                    <td><small>৳{{ number_format($invoice->total_amount, 2) }}</small></td>
+                                    <td><small>{{ number_format($invoice->total_amount, 2) }}</small></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -288,7 +288,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if($invoice->delivery_request_status === 'requested' && $invoice->delivery_status !== 'delivered')
+                                        @if($invoice->delivery_status !== 'delivered')
                                             <form action="{{ route('admin.invoices.mark-delivered', $invoice->id) }}" method="POST" class="mb-3">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-lg btn-block" onclick="return confirm('Mark this invoice as delivered? This will open a 48-hour dispute window for the client.');">

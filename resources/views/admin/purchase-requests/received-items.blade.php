@@ -73,8 +73,8 @@
                                                             data-rate="{{ $charge->rate_per_unit }}" 
                                                             data-shipping="{{ $charge->shipping_charge_per_kg }}">
                                                         {{ $charge->item_name }} 
-                                                        (Rate: ৳{{ number_format($charge->rate_per_unit, 2) }}/{{ $charge->unit_type === 'qty' ? 'unit' : 'kg' }}, 
-                                                        Shipping: ৳{{ number_format($charge->shipping_charge_per_kg, 2) }}/kg)
+                                                        (Rate: {{ number_format($charge->rate_per_unit, 2) }}/{{ $charge->unit_type === 'qty' ? 'unit' : 'kg' }}, 
+                                                        Shipping: {{ number_format($charge->shipping_charge_per_kg, 2) }}/kg)
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -119,7 +119,7 @@
                                             <label>Calculated Cost</label>
                                             <input type="text" class="form-control calculated-cost" 
                                                    id="calculated_cost_0" readonly 
-                                                   value="৳0.00" style="background-color: #f8f9fa; font-weight: bold;">
+                                                   value="0.00" style="background-color: #f8f9fa; font-weight: bold;">
                                         </div>
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                         <div class="alert alert-warning mb-3">
                             <i class="fas fa-calculator"></i>
                             <strong>Items Total Cost:</strong> 
-                            <span id="total-cost" class="font-weight-bold" style="font-size: 1.2em;">৳0.00</span>
+                            <span id="total-cost" class="font-weight-bold" style="font-size: 1.2em;">0.00</span>
                             <br><small class="text-muted">(Packaging cost and transportation charge will be calculated separately)</small>
                         </div>
 
@@ -148,7 +148,7 @@
                                     <label for="transportation_charge">Transportation / Delivery Charge (BDT)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">৳</span>
+                                            <span class="input-group-text"></span>
                                         </div>
                                         <input type="number" 
                                                name="transportation_charge" 
@@ -263,7 +263,7 @@
             
             const selectedOption = itemSelect.options[itemSelect.selectedIndex];
             if (!selectedOption || !selectedOption.value) {
-                costDisplay.value = '৳0.00';
+                costDisplay.value = '0.00';
                 calculateTotal();
                 return;
             }
@@ -277,7 +277,7 @@
             const shippingCost = weight * shippingRate;
             const totalCost = itemCost + shippingCost;
             
-            costDisplay.value = '৳' + totalCost.toFixed(2);
+            costDisplay.value = '' + totalCost.toFixed(2);
             calculateTotal();
         }
 
@@ -285,10 +285,10 @@
         function calculateTotal() {
             let total = 0;
             document.querySelectorAll('.calculated-cost').forEach(function(input) {
-                const value = parseFloat(input.value.replace('৳', '').replace(',', '')) || 0;
+                const value = parseFloat(input.value.replace('', '').replace(',', '')) || 0;
                 total += value;
             });
-            document.getElementById('total-cost').textContent = '৳' + total.toFixed(2);
+            document.getElementById('total-cost').textContent = '' + total.toFixed(2);
         }
 
         // Attach event listeners to an item row

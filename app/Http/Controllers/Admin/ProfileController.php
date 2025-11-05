@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -97,5 +98,39 @@ class ProfileController extends Controller
 
         return redirect()->route('admin.profile.edit')
             ->with('success', 'Admin profile updated successfully.');
+    }
+
+    /**
+     * Show the change password form.
+     */
+    public function showChangePasswordForm()
+    {
+        return view('admin.profile.change-password');
+    }
+
+    /**
+     * Update the password.
+     */
+    public function changePassword(Request $request)
+    {
+        $user = Auth::user();
+        
+        $validated = $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        // Verify current password
+        if (!Hash::check($validated['current_password'], $user->password)) {
+            return back()->withErrors(['current_password' => 'The current password is incorrect.'])->withInput();
+        }
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('admin.profile.change-password')
+            ->with('success', 'Password changed successfully.');
     }
 }

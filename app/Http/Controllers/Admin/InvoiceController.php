@@ -14,11 +14,50 @@ class InvoiceController extends Controller
     /**
      * Display a listing of invoices.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with(['user', 'purchaseRequests'])
-            ->latest()
-            ->paginate(15);
+        $query = Invoice::with(['user', 'purchaseRequests'])->latest();
+
+        // Filter by payment_status
+        $paymentStatusFilter = $request->has('payment_status') && $request->payment_status !== '';
+        if ($paymentStatusFilter) {
+            $query->where('payment_status', $request->payment_status);
+        }
+
+        // Filter by delivery_status
+        if ($request->has('delivery_status') && $request->delivery_status !== '') {
+            if ($request->delivery_status === 'pending') {
+                // Include paid invoices that need delivery OR invoices with open dispute window
+                $query->where(function($q) use ($paymentStatusFilter) {
+                    $q->where(function($subQ) use ($paymentStatusFilter) {
+                        // If payment_status filter is already applied, only check delivery status
+                        if ($paymentStatusFilter) {
+                            $subQ->where('delivery_status', '!=', 'delivered');
+                        } else {
+                            $subQ->where('payment_status', 'paid')
+                                 ->where('delivery_status', '!=', 'delivered');
+                        }
+                    })->orWhere('dispute_status', 'open');
+                });
+            } else {
+                $query->where('delivery_status', $request->delivery_status);
+            }
+        }
+
+        // Filter by order_status
+        if ($request->has('order_status') && $request->order_status !== '') {
+            if ($request->order_status === 'completed') {
+                // Include completed orders OR invoices with closed dispute window
+                $query->where(function($q) {
+                    $q->where('order_status', 'completed')
+                      ->orWhere('dispute_status', 'closed');
+                });
+            } else {
+                $query->where('order_status', $request->order_status);
+            }
+        }
+
+        $invoices = $query->paginate(15);
 
         return view('admin.invoices.index', compact('invoices'));
     }
@@ -166,20 +205,16 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::findOrFail($id);
 
-        // Check if delivery was requested
-        if ($invoice->delivery_request_status !== 'requested') {
-            return redirect()->route('admin.invoices.show', $invoice->id)
-                ->with('error', 'Delivery request not submitted by client yet.');
-        }
-
         // Check if already delivered
         if ($invoice->delivery_status === 'delivered') {
             return redirect()->route('admin.invoices.show', $invoice->id)
                 ->with('info', 'Invoice is already marked as delivered.');
         }
 
+        // Admin can mark as delivered even without delivery request from client
         $invoice->update([
             'delivery_status' => 'delivered',
+            'delivery_request_status' => 'requested', // Auto-set if not already set
             'dispute_status' => 'open',
             'dispute_opened_at' => now(),
         ]);

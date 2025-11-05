@@ -110,7 +110,7 @@
                                     <small class="text-muted">{{ $request->user->email }}</small>
                                 </td>
                                 <td>{{ $request->vendor->vendor_name }}</td>
-                                <td><strong>৳{{ number_format($request->amount_bdt ?? $request->amount, 2) }}</strong></td>
+                                <td><strong>{{ number_format($request->amount_bdt ?? $request->amount, 2) }}</strong></td>
                                 <td>₹{{ number_format($request->amount_inr ?? 0, 2) }}</td>
                                     <td>
                                         @if($request->is_gst_payment)

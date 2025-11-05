@@ -76,4 +76,36 @@ class User extends Authenticatable
     {
         return $this->business_name ?? $this->name;
     }
+
+    /**
+     * Get the purchase requests for this user.
+     */
+    public function purchaseRequests()
+    {
+        return $this->hasMany(PurchaseRequest::class);
+    }
+
+    /**
+     * Get the invoices for this user.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * Get the fund transactions for this user.
+     */
+    public function fundTransactions()
+    {
+        return $this->hasMany(FundTransaction::class);
+    }
+
+    /**
+     * Get the vendors for this user.
+     */
+    public function vendors()
+    {
+        return $this->hasMany(Vendor::class);
+    }
 }

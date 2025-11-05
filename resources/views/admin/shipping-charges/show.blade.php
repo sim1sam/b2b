@@ -36,7 +36,7 @@
                         </tr>
                         <tr>
                             <th>Rate per Unit</th>
-                            <td><strong>৳{{ number_format($shippingCharge->rate_per_unit, 2) }}</strong></td>
+                            <td><strong>{{ number_format($shippingCharge->rate_per_unit, 2) }}</strong></td>
                         </tr>
                         <tr>
                             <th>Unit Type</th>
@@ -50,7 +50,7 @@
                         </tr>
                         <tr>
                             <th>Shipping Charge per Kg</th>
-                            <td><strong>৳{{ number_format($shippingCharge->shipping_charge_per_kg, 2) }}</strong></td>
+                            <td><strong>{{ number_format($shippingCharge->shipping_charge_per_kg, 2) }}</strong></td>
                         </tr>
                         <tr>
                             <th>Status</th>

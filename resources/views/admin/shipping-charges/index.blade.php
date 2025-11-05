@@ -87,7 +87,7 @@
                                     <small class="text-muted">{{ $charge->user->email }}</small>
                                 </td>
                                 <td><strong>{{ $charge->item_name }}</strong></td>
-                                <td>৳{{ number_format($charge->rate_per_unit, 2) }}</td>
+                                <td>{{ number_format($charge->rate_per_unit, 2) }}</td>
                                 <td>
                                     @if($charge->unit_type === 'qty')
                                         <span class="badge badge-info">Quantity</span>
@@ -95,7 +95,7 @@
                                         <span class="badge badge-warning">Weight</span>
                                     @endif
                                 </td>
-                                <td>৳{{ number_format($charge->shipping_charge_per_kg, 2) }}</td>
+                                <td>{{ number_format($charge->shipping_charge_per_kg, 2) }}</td>
                                 <td>
                                     @if($charge->is_active)
                                         <span class="badge badge-success">Active</span>

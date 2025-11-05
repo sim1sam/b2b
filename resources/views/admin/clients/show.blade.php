@@ -60,7 +60,7 @@
                             <td>
                                 @if($client->lowest_shipping_charge_per_kg)
                                     <span class="badge badge-info" style="font-size: 1.1em;">
-                                        ৳{{ number_format($client->lowest_shipping_charge_per_kg, 2) }}/Kg
+{{ number_format($client->lowest_shipping_charge_per_kg, 2) }}/Kg
                                     </span>
                                     <br><small class="text-muted">Used for packaging cost calculation</small>
                                 @else

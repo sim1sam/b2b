@@ -25,7 +25,6 @@
                             <th>Payment Status</th>
                             <th>Delivery Request</th>
                             <th>Delivery Status</th>
-                            <th>Order Status</th>
                             <th>Date</th>
                             <th>Actions</th>
                         </tr>
@@ -37,7 +36,7 @@
                                 <td>{{ $invoice->user->business_name ?? $invoice->user->name }}</td>
                                 <td>{{ $invoice->shipping_mark }}</td>
                                 <td>{{ $invoice->purchaseRequests->count() }} order(s)</td>
-                                <td><strong>৳{{ number_format($invoice->rounded_total, 2) }}</strong></td>
+                                <td><strong>{{ number_format($invoice->rounded_total, 2) }}</strong></td>
                                 <td>
                                     @if($invoice->payment_status === 'paid')
                                         <span class="badge badge-success"><i class="fas fa-check-circle"></i> Paid</span>
@@ -45,11 +44,19 @@
                                         <span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td style="white-space: nowrap;">
                                     @if($invoice->delivery_request_status === 'requested')
                                         <span class="badge badge-info"><i class="fas fa-truck"></i> Requested</span>
                                     @else
                                         <span class="text-muted">-</span>
+                                    @endif
+                                    @if($invoice->payment_status === 'paid' && $invoice->delivery_status !== 'delivered')
+                                        <form action="{{ route('admin.invoices.mark-delivered', $invoice->id) }}" method="POST" class="d-inline ml-2">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success" title="Mark as Delivered" onclick="return confirm('Mark this invoice as delivered? This will open a 48-hour dispute window for the client.');">
+                                                <i class="fas fa-truck"></i> Mark as Delivered
+                                            </button>
+                                        </form>
                                     @endif
                                 </td>
                                 <td>
@@ -57,13 +64,6 @@
                                         <span class="badge badge-success"><i class="fas fa-check"></i> Delivered</span>
                                     @else
                                         <span class="badge badge-secondary">Pending</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($invoice->order_status === 'completed')
-                                        <span class="badge badge-primary"><i class="fas fa-check-double"></i> Completed</span>
-                                    @else
-                                        <span class="badge badge-warning">Pending</span>
                                     @endif
                                 </td>
                                 <td>{{ $invoice->invoice_date->format('d M Y') }}</td>

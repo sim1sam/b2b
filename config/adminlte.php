@@ -379,11 +379,35 @@ return [
             'icon' => 'fas fa-fw fa-exclamation-triangle',
             'role' => 'admin',
         ],
+        [
+            'text' => 'Ledger Report',
+            'url' => 'admin/ledger',
+            'icon' => 'fas fa-fw fa-book',
+            'role' => 'admin',
+        ],
+        [
+            'text' => 'Documents',
+            'url' => 'admin/documents',
+            'icon' => 'fas fa-fw fa-file-alt',
+            'role' => 'admin',
+        ],
         ['header' => 'SETTINGS', 'role' => 'admin'],
         [
             'text' => 'Profile',
             'url' => 'admin/profile',
             'icon' => 'fas fa-fw fa-user',
+            'role' => 'admin',
+        ],
+        [
+            'text' => 'Change Password',
+            'url' => 'admin/profile/change-password',
+            'icon' => 'fas fa-fw fa-key',
+            'role' => 'admin',
+        ],
+        [
+            'text' => 'Admin Users',
+            'url' => 'admin/users',
+            'icon' => 'fas fa-fw fa-users-cog',
             'role' => 'admin',
         ],
         [
@@ -399,6 +423,13 @@ return [
             'url' => 'customer/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
             'role' => 'customer',
+        ],
+        [
+            'text' => 'Apps Home',
+            'url' => '#',
+            'icon' => 'fas fa-fw fa-home',
+            'role' => 'customer',
+            'data' => ['dynamic_url' => true],
         ],
         ['header' => 'MY ACCOUNT', 'role' => 'customer'],
         [
@@ -429,6 +460,12 @@ return [
             'text' => 'Disputes',
             'url' => 'customer/disputes',
             'icon' => 'fas fa-fw fa-exclamation-triangle',
+            'role' => 'customer',
+        ],
+        [
+            'text' => 'Ledger Report',
+            'url' => 'customer/ledger',
+            'icon' => 'fas fa-fw fa-book',
             'role' => 'customer',
         ],
         ['header' => 'SETTINGS', 'role' => 'customer'],
@@ -600,4 +637,16 @@ return [
     */
 
     'livewire' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Extra Head
+    |--------------------------------------------------------------------------
+    |
+    | Here you can add extra HTML content to the head section of all pages.
+    | This is useful for adding custom meta tags, favicons, etc.
+    |
+    */
+
+    'extra_head' => '',
 ];

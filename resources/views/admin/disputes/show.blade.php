@@ -43,7 +43,7 @@
                             <p><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</p>
                             <p><strong>Client:</strong> {{ $invoice->user->business_name ?? $invoice->user->name }}</p>
                             <p><strong>Shipping Mark:</strong> {{ $invoice->shipping_mark }}</p>
-                            <p><strong>Total Amount:</strong> ৳{{ number_format($invoice->rounded_total, 2) }}</p>
+                            <p><strong>Total Amount:</strong> {{ number_format($invoice->rounded_total, 2) }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>Invoice Date:</strong> {{ $invoice->invoice_date->format('d M Y') }}</p>

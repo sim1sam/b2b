@@ -43,7 +43,7 @@
                                 <tr>
                                     <td>{{ $pr->po_number }}</td>
                                     <td>{{ $pr->vendor->vendor_name }}</td>
-                                    <td>৳{{ number_format($pr->amount_bdt ?? $pr->amount, 2) }}</td>
+                                    <td>{{ number_format($pr->amount_bdt ?? $pr->amount, 2) }}</td>
                                     <td>
                                         @if($pr->status === 'approved')
                                             <span class="badge badge-success">Approved</span>
@@ -67,15 +67,15 @@
                             <table class="table table-bordered">
                                 <tr>
                                     <th width="30%">Total Amount:</th>
-                                    <td><strong>৳{{ number_format($totalAmount, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($totalAmount, 2) }}</strong></td>
                                 </tr>
                                 <tr>
                                     <th>Round Off:</th>
-                                    <td>৳{{ number_format($roundOffAmount, 2) }}</td>
+                                    <td>{{ number_format($roundOffAmount, 2) }}</td>
                                 </tr>
                                 <tr class="bg-light">
                                     <th>Final Amount:</th>
-                                    <td><strong class="text-primary">৳{{ number_format($roundedTotal, 2) }}</strong></td>
+                                    <td><strong class="text-primary">{{ number_format($roundedTotal, 2) }}</strong></td>
                                 </tr>
                             </table>
                         </div>

@@ -84,9 +84,29 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('disputes/{id}/add-response', [\App\Http\Controllers\Admin\DisputeController::class, 'addResponse'])->name('admin.disputes.add-response');
     Route::post('disputes/{id}/mark-solved', [\App\Http\Controllers\Admin\DisputeController::class, 'markAsSolved'])->name('admin.disputes.mark-solved');
 
+    // Ledger Report
+    Route::get('ledger', [\App\Http\Controllers\Admin\LedgerController::class, 'index'])->name('admin.ledger.index');
+    Route::get('ledger/{customer}/view', [\App\Http\Controllers\Admin\LedgerController::class, 'view'])->name('admin.ledger.view');
+    Route::get('ledger/{customer}/download', [\App\Http\Controllers\Admin\LedgerController::class, 'download'])->name('admin.ledger.download');
+    
+    // Documents
+    Route::get('documents', [\App\Http\Controllers\Admin\DocumentsController::class, 'index'])->name('admin.documents.index');
+
     // Admin Profile
     Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('admin.profile.update');
+    Route::get('profile/change-password', [\App\Http\Controllers\Admin\ProfileController::class, 'showChangePasswordForm'])->name('admin.profile.change-password');
+    Route::post('profile/change-password', [\App\Http\Controllers\Admin\ProfileController::class, 'changePassword'])->name('admin.profile.change-password');
+    
+    // Admin Users Management
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->names([
+        'index' => 'admin.users.index',
+        'create' => 'admin.users.create',
+        'store' => 'admin.users.store',
+        'edit' => 'admin.users.edit',
+        'update' => 'admin.users.update',
+        'destroy' => 'admin.users.destroy',
+    ]);
 
     // Settings
     Route::get('settings', [\App\Http\Controllers\Admin\SettingsController::class, 'edit'])->name('admin.settings.edit');
@@ -102,6 +122,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         'update' => 'admin.shipping-charges.update',
         'destroy' => 'admin.shipping-charges.destroy',
     ]);
+    
+    // Ledger Report
+    Route::get('ledger', [\App\Http\Controllers\Admin\LedgerController::class, 'index'])->name('admin.ledger.index');
+    Route::get('ledger/{customer}/view', [\App\Http\Controllers\Admin\LedgerController::class, 'view'])->name('admin.ledger.view');
+    Route::get('ledger/{customer}/download', [\App\Http\Controllers\Admin\LedgerController::class, 'download'])->name('admin.ledger.download');
 });
 
 // Customer routes
@@ -152,6 +177,11 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function
     // Disputes Management
     Route::get('disputes', [\App\Http\Controllers\Customer\DisputeController::class, 'index'])->name('customer.disputes.index');
     Route::get('disputes/{id}', [\App\Http\Controllers\Customer\DisputeController::class, 'show'])->name('customer.disputes.show');
+    
+    // Ledger Report
+    Route::get('ledger', [\App\Http\Controllers\Customer\LedgerController::class, 'index'])->name('customer.ledger.index');
+    Route::get('ledger/view', [\App\Http\Controllers\Customer\LedgerController::class, 'view'])->name('customer.ledger.view');
+    Route::get('ledger/download', [\App\Http\Controllers\Customer\LedgerController::class, 'download'])->name('customer.ledger.download');
     
     // Profile Management
     Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'edit'])->name('customer.profile.edit');

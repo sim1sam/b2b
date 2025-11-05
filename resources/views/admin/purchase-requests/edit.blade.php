@@ -18,7 +18,7 @@
                         <i class="fas fa-user"></i> 
                         <strong>Client:</strong> {{ $purchaseRequest->user->business_name ?? $purchaseRequest->user->name }}<br>
                         <i class="fas fa-wallet"></i> 
-                        <strong>Available Balance:</strong> ৳{{ number_format($availableBalance, 2) }}
+                        <strong>Available Balance:</strong> {{ number_format($availableBalance, 2) }}
                         @if($exchangeRate && $exchangeRate > 0)
                             <br><i class="fas fa-exchange-alt"></i> 
                             <strong>Exchange Rate:</strong> 
@@ -86,7 +86,7 @@
                             <label>Calculated Amount (BDT)</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">৳</span>
+                                    <span class="input-group-text"></span>
                                 </div>
                                 <input type="text" class="form-control" 
                                        id="calculated_bdt" readonly 
@@ -94,8 +94,8 @@
                                        style="background-color: #f8f9fa; font-weight: bold; color: #28a745;">
                             </div>
                             <small class="form-text text-muted">
-                                Current Amount: ৳{{ number_format($purchaseRequest->amount_bdt ?? $purchaseRequest->amount, 2) }} | 
-                                Available: ৳{{ number_format($availableBalance, 2) }}
+                                Current Amount: {{ number_format($purchaseRequest->amount_bdt ?? $purchaseRequest->amount, 2) }} | 
+                                Available: {{ number_format($availableBalance, 2) }}
                             </small>
                         </div>
 

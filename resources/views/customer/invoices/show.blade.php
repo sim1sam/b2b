@@ -50,21 +50,23 @@
                 </div>
                 <div class="card-body" style="background: white;">
                     <!-- Payment Status Alert -->
-                    @if($invoice->payment_status === 'pending')
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            <strong>Payment Pending:</strong> Please pay this invoice to proceed.
-                            <br>Available Balance: <strong>৳{{ number_format($availableBalance, 2) }}</strong>
-                            @if($availableBalance < $invoice->rounded_total)
-                                <br><small class="text-danger">Insufficient funds. Please add funds first.</small>
-                            @endif
-                        </div>
-                    @else
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle"></i> 
-                            <strong>Payment Completed:</strong> Invoice payment successful.
-                        </div>
-                    @endif
+                    <div class="no-print">
+                        @if($invoice->payment_status === 'pending')
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i> 
+                                <strong>Payment Pending:</strong> Please pay this invoice to proceed.
+                                <br>Available Balance: <strong>{{ number_format($availableBalance, 2) }}</strong>
+                                @if($availableBalance < $invoice->rounded_total)
+                                    <br><small class="text-danger">Insufficient funds. Please add funds first.</small>
+                                @endif
+                            </div>
+                        @else
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i> 
+                                <strong>Payment Completed:</strong> Invoice payment successful.
+                            </div>
+                        @endif
+                    </div>
 
                     <!-- Invoice Header -->
                     <div class="row mb-4" style="min-height: 120px;">
@@ -159,15 +161,15 @@
                         <table class="table table-bordered">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th>#</th>
-                                    <th>PO Number</th>
-                                    <th>Item Name</th>
-                                    <th>Quantity</th>
-                                    <th>Weight (Kg)</th>
-                                    <th>Rate per Unit</th>
-                                    <th>Item Cost</th>
-                                    <th>Shipping Cost</th>
-                                    <th>Total Cost</th>
+                                    <th style="width: 3%;">#</th>
+                                    <th style="width: 10%;">PO Number</th>
+                                    <th style="width: 20%;">Item Name</th>
+                                    <th style="width: 8%;">Qty.</th>
+                                    <th style="width: 10%;">Wt. (Kg)</th>
+                                    <th style="width: 12%;">Cost/ Unit</th>
+                                    <th style="width: 12%;">Item Cost</th>
+                                    <th style="width: 12%;">Shipping Cost</th>
+                                    <th style="width: 13%;">Total Cost</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,17 +184,17 @@
                                             <td>{{ $itemIndex++ }}</td>
                                             <td>{{ $pr->po_number }}</td>
                                             <td><strong>{{ $item->item_name }}</strong></td>
-                                            <td>{{ number_format($item->quantity, 2) }}</td>
+                                            <td>{{ number_format($item->quantity, 0) }}</td>
                                             <td>{{ number_format($item->weight, 2) }}</td>
-                                            <td>৳{{ number_format($item->rate_per_unit, 2) }}</td>
-                                            <td>৳{{ number_format($item->item_cost, 2) }}</td>
+                                            <td>{{ number_format($item->rate_per_unit, 0) }}</td>
+                                            <td>{{ number_format($item->item_cost, 0) }}</td>
                                             <td>
-                                                ৳{{ number_format($item->shipping_cost, 2) }}
+{{ number_format($item->shipping_cost, 0) }}
                                                 @if($isQtyBased)
-                                                    <br><small class="text-muted">(Includes item cost: ৳{{ number_format($item->item_cost, 2) }})</small>
+                                                    <br><small class="text-muted">(Includes item cost: {{ number_format($item->item_cost, 0) }})</small>
                                                 @endif
                                             </td>
-                                            <td><strong>৳{{ number_format($item->total_cost, 2) }}</strong></td>
+                                            <td><strong>{{ number_format($item->total_cost, 0) }}</strong></td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -200,7 +202,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Items Subtotal:</strong></td>
-                                    <td><strong>৳{{ number_format($itemsTotalCost, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($itemsTotalCost, 2) }}</strong></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-right"><strong>Net Weight:</strong></td>
@@ -218,10 +220,10 @@
                                 <tr>
                                     <td colspan="5" class="text-right"><strong>Packaging Cost:</strong></td>
                                     <td colspan="4">
-                                        <strong>৳{{ number_format($packagingCost, 2) }}</strong>
+                                        <strong>{{ number_format($packagingCost, 2) }}</strong>
                                         @if($packagingWeight > 0 && $lowestShippingCharge > 0)
                                             <small class="text-muted">
-                                                ({{ number_format($packagingWeight, 2) }} Kg × ৳{{ number_format($lowestShippingCharge, 2) }}/Kg)
+                                                ({{ number_format($packagingWeight, 2) }} Kg × {{ number_format($lowestShippingCharge, 2) }}/Kg)
                                             </small>
                                         @endif
                                     </td>
@@ -229,23 +231,23 @@
                                 @if($totalTransportationCharge > 0)
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Transportation / Delivery Charge:</strong></td>
-                                    <td><strong>৳{{ number_format($totalTransportationCharge, 2) }}</strong></td>
+                                    <td><strong>{{ number_format($totalTransportationCharge, 2) }}</strong></td>
                                 </tr>
                                 @endif
                                 <tr>
                                     <td colspan="8" class="text-right"><strong>Round Off:</strong></td>
                                     <td>
-                                        <strong>৳{{ number_format($invoice->total_amount - $invoice->rounded_total, 2) }}</strong>
+                                        <strong>{{ number_format($invoice->total_amount - $invoice->rounded_total, 2) }}</strong>
                                         <small class="text-muted">(Round to nearest lower 50)</small>
                                     </td>
                                 </tr>
                                 <tr class="bg-light">
                                     <td colspan="8" class="text-right"><strong>Total Amount:</strong></td>
-                                    <td><strong class="text-primary" style="font-size: 1.2em;">৳{{ number_format($invoice->rounded_total, 2) }}</strong></td>
+                                    <td><strong class="text-primary" style="font-size: 1.2em;">{{ number_format($invoice->rounded_total, 2) }}</strong></td>
                                 </tr>
                                 <tr class="text-muted">
                                     <td colspan="8" class="text-right"><small>Original Amount:</small></td>
-                                    <td><small>৳{{ number_format($invoice->total_amount, 2) }}</small></td>
+                                    <td><small>{{ number_format($invoice->total_amount, 2) }}</small></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -259,18 +261,18 @@
                     </div>
 
                     <!-- Payment and Delivery Request Actions -->
-                    <div class="mt-4">
+                    <div class="mt-4 no-print">
                         @if($invoice->payment_status === 'pending')
                             <div class="card bg-light">
                                 <div class="card-header">
                                     <h5 class="mb-0"><i class="fas fa-credit-card"></i> Pay Invoice</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Amount to Pay:</strong> ৳{{ number_format($invoice->rounded_total, 2) }}</p>
-                                    <p><strong>Available Balance:</strong> ৳{{ number_format($availableBalance, 2) }}</p>
+                                    <p><strong>Amount to Pay:</strong> {{ number_format($invoice->rounded_total, 2) }}</p>
+                                    <p><strong>Available Balance:</strong> {{ number_format($availableBalance, 2) }}</p>
                                     
                                     @if($availableBalance >= $invoice->rounded_total)
-                                        <form action="{{ route('customer.invoices.pay', $invoice->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to pay ৳{{ number_format($invoice->rounded_total, 2) }} from your available funds?');">
+                                        <form action="{{ route('customer.invoices.pay', $invoice->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to pay {{ number_format($invoice->rounded_total, 2) }} from your available funds?');">
                                             @csrf
                                             <button type="submit" class="btn btn-success btn-lg">
                                                 <i class="fas fa-check-circle"></i> Pay Now (Deduct from Available Funds)
@@ -406,6 +408,11 @@
             .btn, .card-header, .content-header, .main-header, .main-sidebar, .main-footer, .navbar {
                 display: none !important;
             }
+            /* Hide payment status and dispute sections */
+            .no-print,
+            .no-print * {
+                display: none !important;
+            }
             .card {
                 border: none !important;
                 box-shadow: none !important;
@@ -441,10 +448,12 @@
             table {
                 border-collapse: collapse !important;
                 width: 100% !important;
+                table-layout: fixed !important;
             }
             table td, table th {
                 border: 1px solid #000 !important;
                 padding: 8px !important;
+                word-wrap: break-word;
             }
             hr {
                 border-top: 2px solid #000 !important;

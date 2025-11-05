@@ -7,3 +7,7 @@
     @endif
 @endpush
 
+@push('js')
+    @include('components.logo-link')
+@endpush
+
